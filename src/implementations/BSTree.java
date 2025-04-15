@@ -16,7 +16,12 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         this.size = 0;
     }
 
-    @Override
+    public BSTree(E rootData) {
+        this.root = new BSTreeNode<>(rootData);
+        this.size = 1;
+    }
+
+	@Override
     public BSTreeNode<E> getRoot() throws NullPointerException {
         if (root == null) {
             throw new NullPointerException("The tree is empty.");
