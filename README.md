@@ -17,7 +17,10 @@ java -jar WordTracker.jar <input.txt> -po
 ```
 
 To capture output in a file instead of the console, add -f<filename>:
+
+```
 java -jar WordTracker.jar <input.txt> -pl -fresults.txt
+```
 
 Options
 
