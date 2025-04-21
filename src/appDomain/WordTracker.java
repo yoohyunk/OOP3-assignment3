@@ -220,7 +220,6 @@ public class WordTracker implements Comparable<WordTracker>, Serializable {
         return (resultNode != null) ? resultNode.getElement() : null;
     }
 
-
     /**
      * Loads a previously saved BSTree from the repository.ser file.
      *
