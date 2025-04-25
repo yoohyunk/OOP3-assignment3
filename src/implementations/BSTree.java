@@ -5,22 +5,45 @@ import utilities.Iterator;
 import java.util.NoSuchElementException;
 import java.io.Serializable;
 
-
+/**
+ * A generic Binary Search Tree (BST) implementation using BSTreeNode.
+ * Supports standard BST operations and various traversal iterators.
+ * Elements must be comparable.
+ *
+ * @param <E> the type of elements in this tree, which must implement Comparable
+ */
 public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Serializable {
     private static final long serialVersionUID = 1L;
     private BSTreeNode<E> root;
     private int size;
 
+    
+    /**
+	 * Constructs an empty Binary Search Tree.
+	 */
     public BSTree() {
         this.root = null;
         this.size = 0;
     }
 
+    
+    /**
+     * Constructs a BST with a single element as the root.
+     *
+     * @param rootData the element to be the root
+     */
     public BSTree(E rootData) {
         this.root = new BSTreeNode<>(rootData);
         this.size = 1;
     }
 
+    
+    /**
+     * Returns the root node of the tree.
+     *
+     * @return the root node
+     * @throws NullPointerException if the tree is empty
+     */
 	@Override
     public BSTreeNode<E> getRoot() throws NullPointerException {
         if (root == null) {
@@ -28,7 +51,13 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         }
         return root;
     }
-
+	
+	
+	/**
+	 * Returns the height of the tree (number of levels).
+	 * 
+     * @return the height of the tree
+     */
     @Override
     public int getHeight() {
         return getHeight(root);
@@ -40,22 +69,46 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
 
+    
+    /**
+     * Returns the number of elements in the tree.
+     * 
+     * @return the number of elements in the tree
+     */
     @Override
     public int size() {
         return size;
     }
 
+    
+    /**
+     * Checks if the tree is empty.
+     * 
+	 * @return true if the tree is empty, false otherwise
+	 */
     @Override
     public boolean isEmpty() {
         return (size == 0);
     }
-
+    
+    
+    /**
+     * Clears all elements from the tree.
+     */
     @Override
     public void clear() {
         root = null;
         size = 0;
     }
 
+    
+    /**
+     * Checks if the tree contains the specified element.
+     *
+     * @param entry the element to search for
+     * @return true if the element is found
+     * @throws NullPointerException if entry is null
+     */
     @Override
     public boolean contains(E entry) throws NullPointerException {
         if (entry == null) {
@@ -64,6 +117,14 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         return search(entry) != null;
     }
 
+    
+    /**
+     * Searches for a node containing the specified element.
+     *
+     * @param entry the element to search for
+     * @return the node containing the element, or null if not found
+     * @throws NullPointerException if entry is null
+     */
     @Override
     public BSTreeNode<E> search(E entry) throws NullPointerException {
         if (entry == null) {
@@ -86,6 +147,13 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         }
     }
     
+    /**
+     * Adds an element to the tree.
+     *
+     * @param newEntry the element to add
+     * @return true if added successfully
+     * @throws NullPointerException if element is null
+     */
     @Override
     public boolean add(E newEntry) throws NullPointerException {
         if (newEntry == null) {
@@ -124,6 +192,13 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         }
     }
     
+    
+    /**
+     * Removes and returns the node with the minimum element in the tree.
+     *
+     * @return the removed node, or null if the tree is empty
+     */
+
     @Override
     public BSTreeNode<E> removeMin() {
         if (root == null) {
@@ -144,6 +219,12 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         return minNode;
     }
     
+    
+    /**
+     * Removes and returns the node with the maximum element in the tree.
+     *
+     * @return the removed node, or null if the tree is empty
+     */
     @Override
     public BSTreeNode<E> removeMax() {
         if (root == null) {
@@ -164,24 +245,46 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         return maxNode;
     }
     
+    
+    /**
+     * Returns an iterator for in-order traversal of the tree.
+     *
+     * @return an in-order iterator
+     */
     @Override
     public Iterator<E> inorderIterator() {
         return new InorderIterator();
     }
     
+    
+    /**
+     * Returns an iterator for pre-order traversal of the tree.
+     *
+     * @return a pre-order iterator
+     */
     @Override
     public Iterator<E> preorderIterator() {
         return new PreorderIterator();
     }
     
+    
+    /**
+     * Returns an iterator for post-order traversal of the tree.
+     *
+     * @return a post-order iterator
+     */
     @Override
     public Iterator<E> postorderIterator() {
         return new PostorderIterator();
     }
-    
+       
+   
     private class InorderIterator implements Iterator<E> {
         private java.util.Stack<BSTreeNode<E>> stack;
         
+        /**
+         * Constructs an in-order iterator starting from the root.
+         */
         public InorderIterator() {
             stack = new java.util.Stack<>();
             BSTreeNode<E> current = root;
@@ -191,11 +294,22 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
             }
         }
         
+        /**
+         * Checks if there are more elements in the traversal.
+         *
+         * @return true if there are more elements
+         */
         @Override
         public boolean hasNext() {
             return !stack.isEmpty();
         }
         
+        /**
+         * Returns the next element in the in-order traversal.
+         *
+         * @return the next element
+         * @throws NoSuchElementException if there are no more elements
+         */
         @Override
         public E next() throws NoSuchElementException {
             if (!hasNext()) {
@@ -217,6 +331,9 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
     private class PreorderIterator implements Iterator<E> {
         private java.util.Stack<BSTreeNode<E>> stack;
         
+        /**
+         * Constructs an pre-order iterator starting from the root.
+         */
         public PreorderIterator() {
             stack = new java.util.Stack<>();
             if (root != null) {
@@ -224,11 +341,23 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
             }
         }
         
+        /**
+         * Checks if there are more elements in the traversal.
+         *
+         * @return true if there are more elements
+         */
         @Override
         public boolean hasNext() {
             return !stack.isEmpty();
         }
         
+        
+        /**
+         * Returns the next element in the pre-order traversal.
+         *
+         * @return the next element
+         * @throws NoSuchElementException if there are no more elements
+         */
         @Override
         public E next() throws NoSuchElementException {
             if (!hasNext()) {
@@ -250,6 +379,9 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
         private java.util.Stack<BSTreeNode<E>> stack1;
         private java.util.Stack<BSTreeNode<E>> stack2;
         
+        /**
+         * Constructs an post-order iterator starting from the root.
+         */
         public PostorderIterator() {
             stack1 = new java.util.Stack<>();
             stack2 = new java.util.Stack<>();
@@ -268,11 +400,22 @@ public class BSTree<E extends Comparable<? super E>> implements BSTreeADT<E>, Se
             }
         }
         
+        /**
+         * Checks if there are more elements in the traversal.
+         *
+         * @return true if there are more elements
+         */
         @Override
         public boolean hasNext() {
             return !stack2.isEmpty();
         }
         
+        /**
+         * Returns the next element in the post-order traversal.
+         *
+         * @return the next element
+         * @throws NoSuchElementException if there are no more elements
+         */
         @Override
         public E next() throws NoSuchElementException {
             if (!hasNext()) {
